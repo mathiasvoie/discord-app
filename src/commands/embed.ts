@@ -1,5 +1,11 @@
-import { EmbedBuilder } from '@discordjs/builders';
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { ButtonBuilder, EmbedBuilder } from '@discordjs/builders';
+
+import {
+  ActionRowBuilder,
+  ButtonStyle,
+  CommandInteraction,
+  SlashCommandBuilder,
+} from 'discord.js';
 
 module.exports = {
   metadata: new SlashCommandBuilder()
@@ -7,10 +13,24 @@ module.exports = {
     .setDescription('Replies with an embedded message.'),
 
   execute: async (interaction: CommandInteraction) => {
-    const embed = new EmbedBuilder()
-      .setTitle('Hello World')
-      .setDescription('This is an embedded message.');
+    const exampleEmbed = new EmbedBuilder()
+      .setTitle('Example Embed')
+      .setDescription('This is an example embed with a button.')
+      .setColor(0x0099ff); // Blue color
 
-    await interaction.reply({ embeds: [embed] });
+    // Create a button
+    // If you want to handle the click you need to make a client.on handler for interactionCreate.
+    const exampleButton = new ButtonBuilder()
+      .setCustomId('my_button')
+      .setLabel('Click Me!')
+      .setStyle(ButtonStyle.Primary);
+
+    // Create an action row and add the button
+    const row = new ActionRowBuilder().addComponents(exampleButton);
+
+    await interaction.reply({
+      embeds: [exampleEmbed.toJSON()],
+      components: [row.toJSON()],
+    });
   },
 };
